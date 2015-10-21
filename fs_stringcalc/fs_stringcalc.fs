@@ -31,6 +31,7 @@ let stringCalc(input:string) =
     | 0 ->  0
     | _ ->  values.Replace(newline, delimiter).Split delimiter
             |> Seq.map parse
+            |> Seq.filter (fun x -> x < 1000)
             |> Seq.sum
 
 [<Test>]
@@ -56,3 +57,7 @@ let ``Input can define delimiter``() =
 [<Test>]
 let ``Negative numbers throw exception``() =
     raises<NegativeValueError> <@ stringCalc "1,-2,3" @>
+
+[<Test>]
+let ``Large numbers (over 999) are ignored``() =
+    raises<NegativeValueError> <@ stringCalc "1,-2,3,1000" @>
