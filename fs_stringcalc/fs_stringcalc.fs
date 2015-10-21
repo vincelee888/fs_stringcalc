@@ -3,12 +3,11 @@
 open NUnit.Framework
 open System
 
-let delimiters = [| ','; '\n' |]
-
 let stringCalc(input:string) =
+    let delimiter = ','
     match input.Length with
     | 0 ->  0
-    | _ ->  input.Split delimiters
+    | _ ->  input.Replace('\n', delimiter).Split delimiter
             |> Seq.map Int32.Parse
             |> Seq.sum
 
@@ -31,3 +30,8 @@ let ``Multiple numbers delimited by commas are added``() =
 let ``New line can act as delimiter``() =
     let result = stringCalc "1\n2,3"
     Assert.That(result, Is.EqualTo 6)
+
+//[<Test>]
+//let ``Input can define delimiter``() =
+//    let result = stringCalc "//;\n1,2,3"
+//    Assert.That(result, Is.EqualTo 6)
