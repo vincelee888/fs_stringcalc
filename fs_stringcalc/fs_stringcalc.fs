@@ -17,13 +17,20 @@ let getNumbers(input:string) =
     | true -> input.Substring(input.IndexOf(newline) + 1)
     | false -> input
 
+exception NegativeValueError of string
+
+let parse(input:string) =
+    let value = Int32.Parse input
+    if value < 0 then raise (NegativeValueError("Can not accept negatives"))
+    else value
+
 let stringCalc(input:string) =
     let delimiter = getDelimiter input
     let values = getNumbers input
     match values.Length with
     | 0 ->  0
     | _ ->  values.Replace(newline, delimiter).Split delimiter
-            |> Seq.map Int32.Parse
+            |> Seq.map parse
             |> Seq.sum
 
 [<Test>]
@@ -45,3 +52,7 @@ let ``New line can act as delimiter``() =
 [<Test>]
 let ``Input can define delimiter``() =
     test <@ 6 = stringCalc "//;\n1;2;3" @>
+
+[<Test>]
+let ``Negative numbers throw exception``() =
+    raises<NegativeValueError> <@ stringCalc "1,-2,3" @>
