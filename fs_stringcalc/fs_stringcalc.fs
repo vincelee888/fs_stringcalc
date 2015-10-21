@@ -3,14 +3,17 @@
 open NUnit.Framework
 open System
 
+let newline = '\n'
+let customDelimiterPrefix = "//"
+
 let getDelimiter(input:string) =
-    match input.StartsWith "//" with 
+    match input.StartsWith customDelimiterPrefix with 
     | true -> input.[2]
     | false -> ','
 
 let getNumbers(input:string) =
-    match input.StartsWith "//" with 
-    | true -> input.Substring(input.IndexOf("\n") + 1)
+    match input.StartsWith customDelimiterPrefix with 
+    | true -> input.Substring(input.IndexOf(newline) + 1)
     | false -> input
 
 let stringCalc(input:string) =
@@ -18,7 +21,7 @@ let stringCalc(input:string) =
     let values = getNumbers input
     match values.Length with
     | 0 ->  0
-    | _ ->  values.Replace('\n', delimiter).Split delimiter
+    | _ ->  values.Replace(newline, delimiter).Split delimiter
             |> Seq.map Int32.Parse
             |> Seq.sum
 
