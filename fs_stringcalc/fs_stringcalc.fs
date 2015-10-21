@@ -3,10 +3,12 @@
 open NUnit.Framework
 open System
 
+let delimiters = [| ','; '\n' |]
+
 let stringCalc(input:string) =
     match input.Length with
     | 0 ->  0
-    | _ ->  input.Split ','
+    | _ ->  input.Split delimiters
             |> Seq.map Int32.Parse
             |> Seq.sum
 
@@ -23,4 +25,9 @@ let ``Single number in string equals same number``() =
 [<Test>]
 let ``Multiple numbers delimited by commas are added``() =
     let result = stringCalc "1,2,3"
+    Assert.That(result, Is.EqualTo 6)
+
+[<Test>]
+let ``New line can act as delimiter``() =
+    let result = stringCalc "1\n2,3"
     Assert.That(result, Is.EqualTo 6)
