@@ -3,9 +3,12 @@
 open NUnit.Framework
 open System
 
-let stringCalc(input) =
-    if input = "" then 0
-    else Int32.Parse input
+let stringCalc(input:string) =
+    match input.Length with
+    | 0 ->  0
+    | _ ->  input.Split ','
+            |> Seq.map Int32.Parse
+            |> Seq.sum
 
 [<Test>]
 let ``Empty string equals 0``() = 
@@ -16,3 +19,8 @@ let ``Empty string equals 0``() =
 let ``Single number in string equals same number``() =
     let result = stringCalc "8"
     Assert.That(result, Is.EqualTo 8)
+
+[<Test>]
+let ``Multiple numbers delimited by commas are added``() =
+    let result = stringCalc "1,2,3"
+    Assert.That(result, Is.EqualTo 6)
