@@ -2,6 +2,7 @@
 
 open NUnit.Framework
 open System
+open Swensen.Unquote
 
 let newline = '\n'
 let customDelimiterPrefix = "//"
@@ -27,25 +28,20 @@ let stringCalc(input:string) =
 
 [<Test>]
 let ``Empty string equals 0``() = 
-    let result = stringCalc ""
-    Assert.That(result, Is.EqualTo 0)
+    test <@ 0 = stringCalc "" @>
 
 [<Test>]
 let ``Single number in string equals same number``() =
-    let result = stringCalc "8"
-    Assert.That(result, Is.EqualTo 8)
+    test <@ 8 = stringCalc "8" @>
 
 [<Test>]
 let ``Multiple numbers delimited by commas are added``() =
-    let result = stringCalc "1,2,3"
-    Assert.That(result, Is.EqualTo 6)
+    test <@ 6 = stringCalc "1,2,3" @>
 
 [<Test>]
 let ``New line can act as delimiter``() =
-    let result = stringCalc "1\n2,3"
-    Assert.That(result, Is.EqualTo 6)
+    test <@ 6 = stringCalc "1\n2,3" @>
 
 [<Test>]
 let ``Input can define delimiter``() =
-    let result = stringCalc "//;\n1;2;3"
-    Assert.That(result, Is.EqualTo 6)
+    test <@ 6 = stringCalc "//;\n1;2;3" @>
