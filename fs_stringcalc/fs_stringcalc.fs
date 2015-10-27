@@ -9,7 +9,7 @@ let customDelimiterPrefix = "//"
 
 let getDelimiter(input:string) =
     match input.StartsWith customDelimiterPrefix with 
-    | true -> input.[2]
+    | true -> input.[customDelimiterPrefix.Length]
     | false -> ','
 
 let getNumbers(input:string) =
@@ -60,4 +60,4 @@ let ``Negative numbers throw exception``() =
 
 [<Test>]
 let ``Large numbers (over 999) are ignored``() =
-    raises<NegativeValueError> <@ stringCalc "1,-2,3,1000" @>
+    test <@ 6 = stringCalc "//;\n1000;1;2;3" @>
